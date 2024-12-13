@@ -16,3 +16,26 @@
 | **CORS Misconfiguration**         | Allows unauthorized domains to access restricted resources via browser.                     | None                              | Implement strict CORS policies, validate allowed origins.                                         | Medium           | Permitting `*` in the CORS configuration.                                                          |
 | **DNS Rebinding**                 | Exploits browsers to interact with internal networks by resolving a domain to internal IPs. | None                              | Validate DNS requests, restrict IP ranges, implement host-based access controls.                  | High             | Making an internal API call via an attacker-controlled domain.                                    |
 
+** (https://owasp.org/www-community/attacks/)
+
+| **Measure**                | **Purpose**                          | **Example Implementation**                              | **Mitigation**                          |
+|----------------------------|--------------------------------------|-------------------------------------------------------|-----------------------------------------|
+| **CSP**                    | Controls resource loading           | `default-src 'self'; script-src 'trusted.com';`        | Prevents XSS and data injection         |
+| **CORS**                   | Manages cross-origin requests       | `Access-Control-Allow-Origin: trusted.com`            | Prevents unauthorized resource access   |
+| **XFO**                    | Prevents clickjacking               | `X-Frame-Options: SAMEORIGIN`                         | Blocks framing attacks                  |
+| **Cookie Security**         | Secures session cookies             | `Set-Cookie: Secure; HttpOnly; SameSite=Strict;`      | Mitigates session hijacking             |
+| **HSTS**                   | Enforces HTTPS                      | `Strict-Transport-Security: max-age=31536000;`        | Prevents MITM attacks                   |
+| **Referrer Policy**         | Controls referrer data sharing      | `Referrer-Policy: no-referrer`                        | Prevents sensitive data leakage         |
+| **Feature Policy / Permissions Policy** | Limits browser features usage    | `Permissions-Policy: geolocation=(), camera=()`       | Restricts potentially sensitive features like camera and mic access |
+| **X-Content-Type-Options** | Prevents MIME-type sniffing         | `X-Content-Type-Options: nosniff`                     | Stops browsers from interpreting files incorrectly |
+| **Subresource Integrity (SRI)** | Ensures integrity of external resources | `<script src="file.js" integrity="sha256-hash">`       | Prevents modified or malicious files from being loaded |
+| **Input Sanitization**     | Prevents injection attacks          | Escaping/validating inputs with libraries like DOMPurify | Blocks XSS and other injection vectors |
+| **JavaScript Disabling**   | Reduces risks from malicious scripts | Content blocker tools, or CSP policies restricting `script-src` | Prevents execution of malicious scripts |
+| **Cache-Control Headers**  | Controls browser caching            | `Cache-Control: no-store, no-cache, must-revalidate`   | Prevents sensitive data from being cached |
+| **Clear-Site-Data Header** | Clears stored data for privacy      | `Clear-Site-Data: "*"`                                 | Prevents old data from persisting after logout |
+| **Anti-Phishing Scripts**  | Protects against phishing           | Browser's built-in anti-phishing mechanisms or content filtering tools | Reduces risks from malicious websites |
+| **Content Encoding Headers** | Ensures secure data compression    | `Content-Encoding: gzip`                              | Avoids risks like compression-related vulnerabilities (e.g., CRIME attack) |
+
+
+
+
