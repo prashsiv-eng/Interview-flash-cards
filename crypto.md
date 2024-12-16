@@ -9,6 +9,7 @@ Cryptography forms the backbone of secure communication and data protection in t
 **Description**:  
 Symmetric cryptography uses a single key for both encryption and decryption. Both the sender and recipient share this secret key securely.
 
+
 **Example**:  
 Bob encrypts a message using a shared key. Alice decrypts it using the same key.
 
@@ -108,3 +109,47 @@ The recipient uses the sender's public key to decrypt the digest and compares it
 PKI manages digital certificates and public-private key pairs. Certification Authorities (CAs) validate public keys and issue certificates to establish trust.
 
 
+Here are some examples of stream ciphers:
+RC4: A modern symmetric-key stream cipher used in wireless networks and SSL protocols. It was developed in 1987 by Ron Rivest, who also helped create the RSA public-key cipher. While RC4 is still used, it has many known vulnerabilities. 
+A5/1: A stream cipher used for voice encryption in GSM mobile phones. 
+ChaCha20: A modified version of Salsa20 that is supported in TLS 1.3. 
+LILI-128: A stream cipher with a 128-bit key that is resistant to known attacks. It is easy to implement in software or hardware.
+
+## Password Storage
+- Use a strong password hashing algorithm like Argon2, PBKDF2, or Bcrypt.
+- Generate a unique salt for each password and store it along with the hashed password.
+- Choose a reputable and widely-used library like bcrypt (Node.js), passlib (Python), or jBCrypt (Java).
+- Store the hashed password and salt in a secure database or storage solution.
+- Limit access to the stored passwords to only those who need it.
+- Enforce strong password policies - Length, password rotation, mix of alphanumeric and special characters etc.
+- password reset, MFA, initial user onboarding
+
+A **cipher suite** is a combination of cryptographic algorithms used to secure network communications, particularly in protocols like SSL/TLS. It defines the set of algorithms that determine how different aspects of a secure connection will be handled, including encryption, key exchange, and integrity checking. A cipher suite typically includes the following components:
+
+1. **Key Exchange Algorithm**: This algorithm determines how the parties involved in the communication will securely exchange keys for encryption. Examples include:
+   - **RSA** (Rivest-Shamir-Adleman)
+   - **ECDHE** (Elliptic Curve Diffie-Hellman Ephemeral)
+   - **DH** (Diffie-Hellman)
+
+2. **Authentication Algorithm**: This algorithm ensures that the identity of the communicating parties is verified. Typically, this is combined with the key exchange algorithm. Examples include:
+   - **RSA**
+   - **ECDSA** (Elliptic Curve Digital Signature Algorithm)
+
+3. * bulk Encryption Algorithm**: This algorithm defines how the data will be encrypted during transmission. Examples include:
+   - **AES** (Advanced Encryption Standard) with different key sizes (128, 256)
+   - **ChaCha20**
+
+4. **Message Authentication Code (MAC) Algorithm**: This algorithm ensures the integrity of the data and verifies that it has not been tampered with during transit. Examples include:
+   - **SHA-256**
+   - **SHA-384**
+
+
+
+### Example Cipher Suite:
+A cipher suite like **TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256** breaks down as:
+- **ECDHE**: Elliptic Curve Diffie-Hellman Ephemeral (key exchange)
+- **RSA**: RSA (authentication)
+- **AES_128_GCM**: AES encryption with a 128-bit key in Galois/Counter Mode (encryption)
+- **SHA256**: SHA-256 (hashing)
+
+Each cipher suite defines how a secure connection will be established, ensuring confidentiality, integrity, and authentication, and its choice impacts the security and performance of the connection. Modern systems often use AES for encryption and SHA-256 for integrity, as they are both considered secure and efficient.
