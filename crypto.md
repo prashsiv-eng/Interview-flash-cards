@@ -22,17 +22,34 @@ Bob encrypts a message using a shared key. Alice decrypts it using the same key.
 2. **Trust Dependency**: Both parties must trust each other to keep the key secure.
 3. **No Authentication**: Does not verify the sender's identity, lacking non-repudiation and integrity.
 
-**Algorithms**:
+### Block Cipher Algorithms:
 - **DES**: Operates with a 64-bit block size.
 - **3DES**: Enhances DES security by applying encryption three times.
-- **AES**: Supports key sizes of 128, 192, and 256 bits.
+- **AES**: Supports key sizes of 128bits(10 rounds), 192bits(12 rounds), and 256bits(14 rounds) bits.
 
 **Modes of Operation**:
 1. **ECB (Electronic Codebook)**: Simple but prone to pattern leaks.
+   * weakest mode. Shouldn't be used. 
+   * Prone Collision and inference attacks.
 2. **CBC (Cipher Block Chaining)**: Links blocks for better security.
-3. **CTR (Counter Mode)**: Supports parallel processing.
-4. **GCM (Galois Counter Mode)**: Combines encryption with integrity.
+   * Depends on previous cipher text. If one block of cipher text is corrupted, it will proggress to all future blocks.
+   ![alt text](image-1.png)
 
+3. **CTR (Counter Mode)**: Supports parallel processing.
+   * Overcomes the disadvantage of CBC by encrypting a counter and XOR with plain text block
+   * Disadvantage - Doesn't have integrity check (Bit flipping attacks)
+   ![alt text](image-2.png)
+4. **GCM (Galois Counter Mode)**: Combines encryption with integrity. (GMAC)
+   * IV is 96 bits + counter is 32 bits = 128bit block. 
+   * IV should be truly random (entropy)
+   ![alt text](image.png)
+
+
+### Stream cipher Algorithms
+- **RC4**: A modern symmetric-key stream cipher used in wireless networks and SSL protocols. It was developed in 1987 by Ron Rivest, who also helped create the RSA public-key cipher. While RC4 is still used, it has many known vulnerabilities. 
+- **A5/1**: A stream cipher used for voice encryption in GSM mobile phones. 
+- **ChaCha20**: A modified version of Salsa20 that is supported in TLS 1.3. 
+- **LILI-128**: A stream cipher with a 128-bit key that is resistant to known attacks. It is easy to implement in software or hardware.
 ---
 
 ## Asymmetric Cryptography
@@ -57,6 +74,16 @@ Bob encrypts a message using Alice's public key. Only Alice can decrypt it using
   - **Authentication**: ECDSA or RSA (e.g., RSA-2048 or higher).
   - **Encryption**: AES-256-GCM.
   - **Hashing**: SHA-256 or SHA-384.
+---
+### Public Key Infrastructure (PKI)
+PKI manages digital certificates and public-private key pairs. 
+- Certification Authorities (CAs) validate public keys and issue certificates to establish trust.
+X.509 certificate
+- Online Certificate status protocol (OCSP) : protocol to query if certificate is revoked
+- Certificate revocation list (CRL)
+- Registration authority(RA): Enterprises can request certificate from RA 
+- chain of trust
+- Software defined perimeter - Pinned certificates, IP in common name, 
 
 **Example Cipher Suite**:  
 `TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384`
@@ -65,6 +92,15 @@ Bob encrypts a message using Alice's public key. Only Alice can decrypt it using
 
 ## Message Integrity and Authentication
 
+## Hashing Algorithms
+
+Hashing generates a fixed-size digest from input data for verifying integrity.  
+**Common Algorithms**:
+- **MD5**: 128-bit digest (deprecated due to vulnerabilities).
+- **SHA-1**: 160-bit digest (deprecated for modern use).
+- **SHA-2**: Includes SHA-256 (256-bit) and SHA-512 (512-bit) digests.
+
+---
 ### Message Authentication Code (MAC)
 - **Purpose**: Verifies message integrity using a symmetric key.
 - **Algorithms**: MD5, SHA-1, SHA-256.
@@ -82,15 +118,6 @@ Bob encrypts a message using Alice's public key. Only Alice can decrypt it using
 
 ---
 
-## Hashing Algorithms
-
-Hashing generates a fixed-size digest from input data for verifying integrity.  
-**Common Algorithms**:
-- **MD5**: 128-bit digest (deprecated due to vulnerabilities).
-- **SHA-1**: 160-bit digest (deprecated for modern use).
-- **SHA-2**: Includes SHA-256 (256-bit) and SHA-512 (512-bit) digests.
-
----
 
 ## Digital Signatures
 
@@ -104,17 +131,6 @@ The recipient uses the sender's public key to decrypt the digest and compares it
 
 ---
 
-## Public Key Infrastructure (PKI)
-
-PKI manages digital certificates and public-private key pairs. Certification Authorities (CAs) validate public keys and issue certificates to establish trust.
-
-
-Here are some examples of stream ciphers:
-RC4: A modern symmetric-key stream cipher used in wireless networks and SSL protocols. It was developed in 1987 by Ron Rivest, who also helped create the RSA public-key cipher. While RC4 is still used, it has many known vulnerabilities. 
-A5/1: A stream cipher used for voice encryption in GSM mobile phones. 
-ChaCha20: A modified version of Salsa20 that is supported in TLS 1.3. 
-LILI-128: A stream cipher with a 128-bit key that is resistant to known attacks. It is easy to implement in software or hardware.
-
 ## Password Storage
 - Use a strong password hashing algorithm like Argon2, PBKDF2, or Bcrypt.
 - Generate a unique salt for each password and store it along with the hashed password.
@@ -125,6 +141,7 @@ LILI-128: A stream cipher with a 128-bit key that is resistant to known attacks.
 - password reset, MFA, initial user onboarding
 
 A **cipher suite** is a combination of cryptographic algorithms used to secure network communications, particularly in protocols like SSL/TLS. It defines the set of algorithms that determine how different aspects of a secure connection will be handled, including encryption, key exchange, and integrity checking. A cipher suite typically includes the following components:
+
 
 1. **Key Exchange Algorithm**: This algorithm determines how the parties involved in the communication will securely exchange keys for encryption. Examples include:
    - **RSA** (Rivest-Shamir-Adleman)
