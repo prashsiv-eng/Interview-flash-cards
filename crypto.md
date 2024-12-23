@@ -67,6 +67,32 @@ Bob encrypts a message using Alice's public key. Only Alice can decrypt it using
 **Disadvantages**:
 1. **Slower**: Computationally intensive compared to symmetric cryptography.
 2. **PKI Requirement**: Needs a Public Key Infrastructure (PKI) for managing keys and certificates.
+**Examples**
+### RSA (Communitative)
+based on mathematial logic that it is very difficult to factorize the product of two large prime numbers. 
+Prime number : Divisible by 1 and itself
+semi prime: factors are 1 and prime numbers (when you multiply 2 prime numbers)
+- Select 2 prime numners P,Q
+- Calculate N=P*Q
+- Totient T =(P-1)*(Q-1)
+- Public Key (E):
+
+      - Should be prime
+      - should be less than T
+      - Should not be a factor of T
+- Private Key (D)
+   - must satisfy (D*E) Mod T = 1
+- Encrption (Message M)
+  - **M^E Mod N = C**
+- Decryption
+   - C^D Mod N = M
+### Deffie-Helman
+based on descrete logrithm problem G^X Mod P = N
+- Agree on 2 numbers P(prime) and G(generator)
+- generate private numbers (X)
+- share public (N) = (G^X)MOD P on both sides
+- key =(public^private) Mod P
+
 
 **Applications**:
 - **TLS (Transport Layer Security)**: Ensures secure web communication.
@@ -85,22 +111,10 @@ X.509 certificate
 - chain of trust
 - Software defined perimeter - Pinned certificates, IP in common name, 
 
-**Example Cipher Suite**:  
-`TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384`
 
 ---
 
 ## Message Integrity and Authentication
-
-## Hashing Algorithms
-
-Hashing generates a fixed-size digest from input data for verifying integrity.  
-**Common Algorithms**:
-- **MD5**: 128-bit digest (deprecated due to vulnerabilities).
-- **SHA-1**: 160-bit digest (deprecated for modern use).
-- **SHA-2**: Includes SHA-256 (256-bit) and SHA-512 (512-bit) digests.
-
----
 ### Message Authentication Code (MAC)
 - **Purpose**: Verifies message integrity using a symmetric key.
 - **Algorithms**: MD5, SHA-1, SHA-256.
@@ -140,6 +154,12 @@ The recipient uses the sender's public key to decrypt the digest and compares it
 - Enforce strong password policies - Length, password rotation, mix of alphanumeric and special characters etc.
 - password reset, MFA, initial user onboarding
 
+
+## TLS
+TLS 1..3 favors simplicity and security over backwards compatibility. Major cchange is in the handshake. Some Weak cipher suites have been deprecated.
+
+1. Browser sends client hello along with the maximum supported 
+
 A **cipher suite** is a combination of cryptographic algorithms used to secure network communications, particularly in protocols like SSL/TLS. It defines the set of algorithms that determine how different aspects of a secure connection will be handled, including encryption, key exchange, and integrity checking. A cipher suite typically includes the following components:
 
 
@@ -152,7 +172,7 @@ A **cipher suite** is a combination of cryptographic algorithms used to secure n
    - **RSA**
    - **ECDSA** (Elliptic Curve Digital Signature Algorithm)
 
-3. * bulk Encryption Algorithm**: This algorithm defines how the data will be encrypted during transmission. Examples include:
+3. **Bulk Encryption Algorithm**: This algorithm defines how the data will be encrypted during transmission. Examples include:
    - **AES** (Advanced Encryption Standard) with different key sizes (128, 256)
    - **ChaCha20**
 
@@ -163,6 +183,10 @@ A **cipher suite** is a combination of cryptographic algorithms used to secure n
 
 
 ### Example Cipher Suite:
+
+**Example Cipher Suite**:  
+`TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384`
+
 A cipher suite like **TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256** breaks down as:
 - **ECDHE**: Elliptic Curve Diffie-Hellman Ephemeral (key exchange)
 - **RSA**: RSA (authentication)
