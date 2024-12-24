@@ -1,0 +1,74 @@
+# SELinux (Security-Enhanced Linux)
+
+## Overview
+- SELinux is a security architecture integrated into the Linux kernel.
+- It provides a mechanism for supporting access control security policies.
+
+## Key Concepts
+- **Mandatory Access Control (MAC)**: Unlike discretionary access control (DAC), MAC restricts the ability of users to access or modify objects based on policies.
+- **Policies**: Define how processes and users can interact with files, network ports, and other resources.
+- **Contexts**: Labels assigned to files, processes, and ports that determine their access permissions.
+
+## Modes
+- **Enforcing**: SELinux policy is enforced, and access is denied based on policy rules.
+- **Permissive**: SELinux policy is not enforced, but violations are logged for auditing.
+- **Disabled**: SELinux is turned off.
+
+## Commands
+- `sestatus`: Check the current status of SELinux.
+- `getenforce`: Display the current mode of SELinux.
+- `setenforce [Enforcing|Permissive]`: Change the mode of SELinux.
+- `chcon`: Change the SELinux context of a file.
+- `semanage`: Manage SELinux policy components.
+- `restorecon`: Restore default SELinux context for files.
+
+## Tips
+- Always test in Permissive mode before switching to Enforcing.
+- Use `audit2allow` to generate custom policies from audit logs.
+- Regularly check logs (`/var/log/audit/audit.log`) for SELinux denials.
+
+## Common Issues
+- **Permission Denied**: Often caused by incorrect SELinux context.
+- **Context Mismatch**: Use `restorecon` to fix context issues.
+
+## Resources
+- [SELinux Project Wiki](https://selinuxproject.org/page/Main_Page)
+- [Red Hat SELinux Guide](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/index)
+
+
+# cgroups (Control Groups)
+
+## Overview
+- cgroups is a Linux kernel feature that limits, accounts for, and isolates the resource usage (CPU, memory, disk I/O, etc.) of a collection of processes.
+
+## Key Concepts
+- **Subsystems**: Also known as controllers, these are modules that control specific resources such as CPU, memory, and I/O.
+- **Hierarchy**: A tree-like structure where each node represents a cgroup and can have child cgroups.
+- **Tasks**: Processes that are assigned to cgroups to control their resource usage.
+
+## Common Subsystems
+- **cpu**: Limits CPU usage for tasks in a cgroup.
+- **memory**: Limits memory usage and can trigger actions when limits are reached.
+- **blkio**: Controls and monitors disk I/O.
+- **cpuset**: Assigns CPUs and memory nodes to tasks in a cgroup.
+
+## Commands
+- `cgcreate`: Create a new cgroup.
+- `cgdelete`: Delete an existing cgroup.
+- `cgset`: Set the parameters of a cgroup.
+- `cgget`: Get the parameters of a cgroup.
+- `cgexec`: Execute a task in a specific cgroup.
+- `cgclassify`: Move existing tasks to a specific cgroup.
+
+## Tips
+- Use `systemd` to manage cgroups on modern Linux distributions.
+- Monitor resource usage with `cgtop` or `systemd-cgtop`.
+- Combine cgroups with namespaces for more effective containerization.
+
+## Common Issues
+- **Resource Starvation**: Incorrect configuration can lead to resource starvation for critical processes.
+- **Complexity**: Managing multiple cgroups and hierarchies can become complex.
+
+## Resources
+- [Linux Kernel Documentation on cgroups](https://www.kernel.org/doc/Documentation/cgroup-v1/)
+- [Red Hat cgroups Guide](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/resource_management_guide/sec-cgroups)
